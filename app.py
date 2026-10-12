@@ -322,6 +322,10 @@ def update_order_status(order_id):
 def not_found(_error):
     return render_template("404.html"), 404
 
+
+# Initialize database when the app starts
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
+
