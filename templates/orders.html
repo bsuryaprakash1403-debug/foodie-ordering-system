@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My orders — Foodie{% endblock %}
+{% block content %}
+<div class="page-title"><span class="eyebrow">ORDER HISTORY</span><h1>My orders</h1><p>View your previous orders and their current status.</p></div>
+{% if orders %}
+<div class="orders-list">
+{% for order in orders %}
+<article class="order-card"><div class="order-head"><div><span class="muted">Order #{{ order.id }}</span><h3>{{ order.created_at }}</h3></div><span class="status status-{{ order.status|lower|replace(' ','-') }}">{{ order.status }}</span></div>
+<div class="order-items">{% for item in order_items[order.id] %}<div><span>{{ item.food_name }} × {{ item.quantity }}</span><strong>₹{{ '%.2f'|format(item.price * item.quantity) }}</strong></div>{% endfor %}</div>
+<div class="order-foot"><span>Delivery to: {{ order.address }}</span><strong>Total ₹{{ '%.2f'|format(order.total) }}</strong></div></article>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div>🧾</div><h3>No orders yet</h3><p>Your placed orders will appear here.</p><a class="button" href="{{ url_for('index') }}">Explore menu</a></div>
+{% endif %}
+{% endblock %}

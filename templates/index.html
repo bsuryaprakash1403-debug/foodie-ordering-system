@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Menu — Foodie{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">FRESH · TASTY · DELIVERED</span>
+    <h1>Your next favourite meal<br><span>is just a click away.</span></h1>
+    <p>Explore the menu, add your favourites to the cart, and place a demo order in minutes.</p>
+    <a class="button button-light" href="#menu">Explore menu ↓</a>
+  </div>
+  <div class="hero-art" aria-hidden="true">🍛</div>
+</section>
+<section id="menu" class="section-heading">
+  <div><span class="eyebrow">OUR MENU</span><h2>Popular dishes</h2></div>
+  <form class="search-form" method="get" action="{{ url_for('index') }}">
+    <input name="q" value="{{ search }}" placeholder="Search food..." aria-label="Search food">
+    <select name="category" aria-label="Filter by category">
+      <option value="">All categories</option>
+      {% for item in categories %}<option value="{{ item }}" {% if selected_category == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+    </select>
+    <button class="button" type="submit">Search</button>
+  </form>
+</section>
+{% if foods %}
+<div class="food-grid">
+  {% for food in foods %}
+  <article class="food-card">
+    {% if food.image_url %}
+      <img class="food-image" src="{{ food.image_url }}" alt="{{ food.name }}" loading="lazy" onerror="this.style.display='none'">
+    {% else %}
+      <div class="food-placeholder">🍽️</div>
+    {% endif %}
+    <div class="food-content">
+      <div class="food-meta"><span class="category-pill">{{ food.category }}</span><span class="rating">★ 4.8</span></div>
+      <h3>{{ food.name }}</h3>
+      <p>{{ food.description }}</p>
+      <div class="food-bottom"><strong>₹{{ '%.2f'|format(food.price) }}</strong>
+        <form method="post" action="{{ url_for('add_to_cart', food_id=food.id) }}">
+          <button class="button add-button" type="submit">+ Add</button>
+        </form>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div>🍽️</div><h3>No dishes found</h3><p>Try another search or category.</p><a class="button" href="{{ url_for('index') }}">Show all food</a></div>
+{% endif %}
+{% endblock %}

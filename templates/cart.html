@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Your cart — Foodie{% endblock %}
+{% block content %}
+<div class="page-title"><span class="eyebrow">YOUR ORDER</span><h1>Shopping cart</h1><p>Review your dishes before checkout.</p></div>
+{% if items %}
+<div class="cart-layout"><form method="post" action="{{ url_for('update_cart') }}" class="cart-list">
+{% for item in items %}
+<div class="cart-item">
+  {% if item.food.image_url %}<img src="{{ item.food.image_url }}" alt="{{ item.food.name }}" onerror="this.style.display='none'">{% else %}<div class="cart-emoji">🍽️</div>{% endif %}
+  <div class="cart-item-info"><h3>{{ item.food.name }}</h3><p>{{ item.food.category }}</p><strong>₹{{ '%.2f'|format(item.food.price) }}</strong></div>
+  <label class="quantity-label">Qty<input type="number" min="0" max="99" name="quantity_{{ item.food.id }}" value="{{ item.quantity }}"></label>
+  <strong class="line-total">₹{{ '%.2f'|format(item.line_total) }}</strong>
+</div>
+{% endfor %}
+<div class="cart-actions"><button class="button button-outline" type="submit">Update cart</button><span class="muted">Set quantity to 0 to remove an item.</span></div>
+</form>
+<aside class="summary-card"><h2>Order summary</h2><div class="summary-line"><span>Subtotal</span><strong>₹{{ '%.2f'|format(total) }}</strong></div><div class="summary-line"><span>Delivery</span><span class="free">FREE</span></div><hr><div class="summary-line total-line"><span>Total</span><strong>₹{{ '%.2f'|format(total) }}</strong></div><a class="button full-button" href="{{ url_for('checkout') }}">Continue to checkout →</a><a class="continue-link" href="{{ url_for('index') }}">← Continue shopping</a></aside></div>
+{% else %}
+<div class="empty-state"><div>🛒</div><h3>Your cart is empty</h3><p>Choose something delicious from our menu.</p><a class="button" href="{{ url_for('index') }}">Browse menu</a></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Order placed — Foodie{% endblock %}
+{% block content %}
+<div class="success-panel"><div class="success-icon">✓</div><span class="eyebrow">ORDER CONFIRMED</span><h1>Thanks for your order!</h1><p>Your demo order has been placed successfully.</p><div class="order-number">Order number <strong>#{{ order.id }}</strong></div><div class="success-details"><div><span>Status</span><strong>{{ order.status }}</strong></div><div><span>Total</span><strong>₹{{ '%.2f'|format(order.total) }}</strong></div></div><a class="button" href="{{ url_for('orders') }}">Track my orders</a> <a class="button button-outline" href="{{ url_for('index') }}">Back to menu</a></div>
+{% endblock %}

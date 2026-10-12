@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard — Foodie{% endblock %}
+{% block content %}
+<div class="page-title"><span class="eyebrow">CONTROL CENTRE</span><h1>Admin dashboard</h1><p>Manage the menu and update customer orders.</p></div>
+<div class="admin-grid"><section class="panel"><h2>➕ Add food item</h2><form method="post" action="{{ url_for('add_food') }}" class="form-stack">
+<label>Food name<input name="name" required maxlength="100" placeholder="e.g. Veg noodles"></label>
+<label>Description<textarea name="description" rows="2" maxlength="300" placeholder="Short description"></textarea></label>
+<div class="two-fields"><label>Price (₹)<input type="number" name="price" min="0" step="0.01" required></label><label>Category<input name="category" value="Main Course" required maxlength="60"></label></div>
+<label>Image URL (optional)<input type="url" name="image_url" placeholder="https://..."></label>
+<button class="button full-button" type="submit">Add to menu</button></form></section>
+<section class="panel"><h2>🍽️ Menu items <span class="count-badge">{{ foods|length }}</span></h2><div class="admin-food-list">{% for food in foods %}<div class="admin-food-row"><div><strong>{{ food.name }}</strong><p>{{ food.category }} · ₹{{ '%.2f'|format(food.price) }}</p></div><div class="admin-food-actions"><span class="availability {{ 'available' if food.available else 'unavailable' }}">{{ 'Available' if food.available else 'Hidden' }}</span><form method="post" action="{{ url_for('toggle_food', food_id=food.id) }}"><button class="small-button" type="submit">{{ 'Hide' if food.available else 'Show' }}</button></form></div></div>{% endfor %}</div></section></div>
+<section class="panel admin-orders"><h2>📦 Customer orders <span class="count-badge">{{ orders|length }}</span></h2>
+{% if orders %}<div class="table-scroll"><table><thead><tr><th>Order</th><th>Customer</th><th>Delivery</th><th>Total</th><th>Status</th><th>Update</th></tr></thead><tbody>
+{% for order in orders %}<tr><td>#{{ order.id }}<br><small>{{ order.created_at }}</small></td><td>{{ order.customer_name }}<br><small>{{ order.email }}</small><br><small>{{ order.phone }}</small></td><td class="address-cell">{{ order.address }}</td><td>₹{{ '%.2f'|format(order.total) }}</td><td><span class="status">{{ order.status }}</span></td><td><form class="status-form" method="post" action="{{ url_for('update_order_status', order_id=order.id) }}"><select name="status" aria-label="Order status">{% for status in ['Placed','Preparing','Out for delivery','Delivered','Cancelled'] %}<option value="{{ status }}" {% if status == order.status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select><button class="small-button" type="submit">Save</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="muted">No orders have been placed yet.</p>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Create account — Foodie{% endblock %}
+{% block content %}
+<div class="auth-layout"><div class="auth-art"><span>🥗</span><h2>Something<br>delicious awaits.</h2><p>Create an account and start exploring the menu.</p></div>
+<div class="auth-card"><span class="eyebrow">JOIN FOODIE</span><h1>Create account</h1><p class="muted">It only takes a minute.</p>
+<form method="post" class="form-stack">
+<label>Full name<input name="name" placeholder="Your name" required maxlength="80" autocomplete="name"></label>
+<label>Email address<input type="email" name="email" placeholder="you@example.com" required autocomplete="email"></label>
+<label>Password<input type="password" name="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password"></label>
+<button class="button full-button" type="submit">Create account</button>
+</form><p class="auth-switch">Already registered? <a href="{{ url_for('login') }}">Sign in</a></p></div></div>
+{% endblock %}

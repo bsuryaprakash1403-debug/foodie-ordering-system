@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Foodie{% endblock %}
+{% block content %}
+<div class="page-title"><span class="eyebrow">ALMOST THERE</span><h1>Checkout</h1><p>Enter your delivery details to place the order.</p></div>
+<div class="checkout-layout"><section class="panel"><h2>Delivery details</h2>
+<form method="post" class="form-stack">
+<label>Recipient name<input name="customer_name" required maxlength="100" value="{{ session.get('user_name','') }}" autocomplete="name"></label>
+<label>Phone number<input type="tel" name="phone" required maxlength="20" placeholder="Your contact number" autocomplete="tel"></label>
+<label>Delivery address<textarea name="address" rows="4" required maxlength="500" placeholder="House number, street, area, city, PIN code" autocomplete="street-address"></textarea></label>
+<p class="payment-note">💳 Demo checkout: no real payment is collected.</p>
+<button class="button full-button" type="submit">Place order · ₹{{ '%.2f'|format(total) }}</button>
+</form></section>
+<aside class="summary-card"><h2>Order summary</h2>{% for food, quantity in items %}<div class="summary-line"><span>{{ food.name }} × {{ quantity }}</span><strong>₹{{ '%.2f'|format(food.price * quantity) }}</strong></div>{% endfor %}<hr><div class="summary-line total-line"><span>Total</span><strong>₹{{ '%.2f'|format(total) }}</strong></div><a class="continue-link" href="{{ url_for('cart') }}">← Back to cart</a></aside></div>
+{% endblock %}
